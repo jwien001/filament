@@ -15,7 +15,19 @@
 
 class Block: public ICollidable, ILevelObject
 {
-    
+public:
+    Color getColor() {return color;}
+    Vector2f getPosition() {return position;}
+    Block(Vector2f pos, Color c);
+    void draw(RenderTarget& target, RenderStates states) const;
+    void setPosition(Vector2f pos);
+    bool isCollidingWith(ICollidable& other);
+    void update(Level& level, Time delta);
+    Sprite& getSprite();
+private:
+    Vector2f position;
+    Color color;
+    Sprite sprite;
 };
 
 #endif /* defined(__filament__Block__) */

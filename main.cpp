@@ -1,7 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 #include <iostream>
+#include "Block.h"
 #include "TextureManager.h"
+
 
 using namespace std;
 
@@ -24,6 +26,8 @@ int main()
 
     sf::Sprite pSpr2;
     pSpr2.setTexture(*pTex);
+    
+    Block blxx0rs = Block(sf::Vector2f(500,500),sf::Color::Black);
 
     sf::Clock clock;
 
@@ -55,6 +59,7 @@ int main()
         glLogicOp(GL_EQUIV);
         window.draw(pSpr);
         window.draw(pSpr2);
+        window.draw(blxx0rs.getSprite());
         window.draw(shape);
         glDisable(GL_COLOR_LOGIC_OP);
         window.display();
