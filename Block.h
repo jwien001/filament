@@ -16,12 +16,12 @@
 class Block: public ICollidable, ILevelObject
 {
 public:
-    Color getColor() {return color;}
-    Vector2f getPosition() {return position;}
+    Color getColor() const {return color;}
+    Vector2f getPosition() const {return position;}
     Block(Vector2f pos, Color c);
     void draw(RenderTarget& target, RenderStates states) const;
     void setPosition(Vector2f pos);
-    bool isCollidingWith(ICollidable& other);
+    bool isCollidingWith(ICollidable& other) const;
     void update(Level& level, Time delta);
     Sprite& getSprite();
 private:

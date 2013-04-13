@@ -20,8 +20,8 @@ void Block::draw(RenderTarget& target, RenderStates state) const{
 void Block::setPosition(Vector2f pos){
     position=pos;
 }
-bool Block::isCollidingWith(ICollidable& other){
-    if ((Collision::BoundingBoxTest(this->getSprite(), other.getSprite())&&(this->getColor())!=other.getColor())) return true;
+bool Block::isCollidingWith(ICollidable& other) const {
+    if ((Collision::BoundingBoxTest(sprite, other.getSprite())&&(this->getColor())!=other.getColor())) return true;
     return false;
 }
 void Block::update(Level& level, Time delta){

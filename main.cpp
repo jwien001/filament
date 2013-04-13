@@ -3,14 +3,13 @@
 #include <iostream>
 #include "Block.h"
 #include "TextureManager.h"
+#include "Level.h"
 
 
 using namespace std;
 
 int main()
 {
-    float x = 20;
-    float y = 30;
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "My First SFML Game");
     window.setFramerateLimit(60);
@@ -24,12 +23,11 @@ int main()
     sf::Sprite pSpr;
     pSpr.setTexture(*pTex);
 
-    sf::Sprite pSpr2;
-    pSpr2.setTexture(*pTex);
-    
     Block blxx0rs = Block(sf::Vector2f(500,500),sf::Color::Black);
 
     sf::Clock clock;
+
+    Level level;
 
     while (window.isOpen())
     {
@@ -41,26 +39,15 @@ int main()
                 window.close();
         }
 
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-            x -= 0.2f * delta.asMilliseconds();
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-            x += 0.2f * delta.asMilliseconds();
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-            y -= 0.2f * delta.asMilliseconds();
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            y += 0.2f * delta.asMilliseconds();
-
-        pSpr2.setPosition(x, y);
-
-        cout<<x<<" "<<y<<endl;
+        level.update(delta);
 
         window.clear(sf::Color(255, 255, 255, 0));
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_EQUIV);
         window.draw(pSpr);
-        window.draw(pSpr2);
         window.draw(blxx0rs.getSprite());
         window.draw(shape);
+        window.draw(level);
         glDisable(GL_COLOR_LOGIC_OP);
         window.display();
     }
