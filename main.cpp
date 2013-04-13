@@ -14,7 +14,7 @@ int main()
     window.setFramerateLimit(60);
 
     sf::RectangleShape shape(sf::Vector2f(200, 100));
-    shape.setFillColor(sf::Color::Red);
+    shape.setFillColor(sf::Color::Black);
     shape.setPosition(100, 100);
 
     sf::Texture* pTex = texManager.getResource("/CS 2804/filament/res/dude.png");
