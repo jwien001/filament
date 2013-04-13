@@ -6,6 +6,7 @@
  */
 #include <SFML/Graphics.hpp>
 #include "Collision.h"
+#include <math.h>
 
 Collision::Collision() {
 }
