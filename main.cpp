@@ -10,20 +10,8 @@ using namespace std;
 
 int main()
 {
-
     sf::RenderWindow window(sf::VideoMode(800, 600), "My First SFML Game");
     window.setFramerateLimit(60);
-
-    sf::RectangleShape shape(sf::Vector2f(200, 100));
-    shape.setFillColor(sf::Color::Black);
-    shape.setPosition(100, 100);
-
-    sf::Texture* pTex = texManager.getResource("/CS 2804/filament/res/dude.png");
-
-    sf::Sprite pSpr;
-    pSpr.setTexture(*pTex);
-
-    Block blxx0rs = Block(sf::Vector2f(500,500),sf::Color::Black);
 
     sf::Clock clock;
 
@@ -44,10 +32,9 @@ int main()
         window.clear(sf::Color(255, 255, 255, 0));
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_EQUIV);
-        window.draw(pSpr);
-        window.draw(blxx0rs.getSprite());
-        window.draw(shape);
+
         window.draw(level);
+
         glDisable(GL_COLOR_LOGIC_OP);
         window.display();
     }

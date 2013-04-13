@@ -8,9 +8,12 @@
 
 #include "Block.h"
 #include "Collision.h"
+#include "TextureManager.h"
 
 Block::Block(Vector2f pos, Color c) : position(pos), color(c)
 {
+    Texture* tex = texManager.getResource("/CS 2804/filament/res/block.png");
+    sprite.setTexture(*tex);
     std::cout<<"Block created.\n";
 }
 

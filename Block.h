@@ -13,7 +13,7 @@
 #include <iostream>
 #include "ILevelObject.h"
 
-class Block: public ICollidable, ILevelObject
+class Block: public ICollidable, public ILevelObject
 {
 public:
     Color getColor() const {return color;}

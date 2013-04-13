@@ -9,7 +9,7 @@
 
 using namespace sf;
 
-class Player : public ILevelObject, ICollidable
+class Player : public ILevelObject, public ICollidable
 {
     Sprite sprite;
     Color color;
