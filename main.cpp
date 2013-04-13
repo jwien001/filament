@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 #include <iostream>
+#include "TextureManager.h"
 
 using namespace std;
 
@@ -16,14 +17,13 @@ int main()
     shape.setFillColor(sf::Color::Red);
     shape.setPosition(100, 100);
 
-    sf::Texture pTex;
-    pTex.loadFromFile("res/dude.png");
+    sf::Texture* pTex = texManager.getResource("res/dude.png");
 
     sf::Sprite pSpr;
-    pSpr.setTexture(pTex);
+    pSpr.setTexture(*pTex);
 
     sf::Sprite pSpr2;
-    pSpr2.setTexture(pTex);
+    pSpr2.setTexture(*pTex);
 
     sf::Clock clock;
 
