@@ -3,6 +3,7 @@
 
 using namespace sf;
 
+//Object that can collide with other things.
 public class ICollidable
 {
     public:

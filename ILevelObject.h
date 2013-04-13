@@ -3,6 +3,7 @@
 
 using namespace sf;
 
+//Object that exists within an object.
 public class ILevelObject : public Drawable
 {
     public:
