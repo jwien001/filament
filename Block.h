@@ -11,8 +11,9 @@
 
 #include "ICollidable.h"
 #include <iostream>
+#include "ILevelObject.h"
 
-class Block: public ICollidable
+class Block: public ICollidable, ILevelObject
 {
     
 };
