@@ -18,6 +18,8 @@ int main()
     shape.setPosition(100, 100);
 
     //HI KAT
+    //SUP JOSH <3
+
     sf::Texture* pTex = texManager.getResource("/CS 2804/filament/res/dude.png");
 
     sf::Sprite pSpr;
