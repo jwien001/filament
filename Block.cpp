@@ -10,6 +10,8 @@
 #include "Collision.h"
 #include "TextureManager.h"
 
+using namespace sf;
+
 Block::Block(Vector2f pos, Color c) : position(pos), color(c)
 {
     Texture* tex = texManager.getResource("/CS 2804/filament/res/block.png");

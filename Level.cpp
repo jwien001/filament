@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Block.h"
 
+using namespace sf;
+
 Level::Level() {
     std::shared_ptr<ILevelObject> plyr{new Player()};
     std::shared_ptr<ILevelObject> block{new Block(Vector2f(500,500), Color::Black)};

@@ -7,29 +7,27 @@
 #include "Collision.h"
 #include "Level.h"
 
-using namespace sf;
-
 class Player : public ILevelObject, public ICollidable
 {
-    Sprite sprite;
-    Color color;
+    sf::Sprite sprite;
+    sf::Color color;
 
     public:
         Player();
 
-        Vector2f getPosition() const {
+        sf::Vector2f getPosition() const {
             return sprite.getPosition();
         }
 
-        void setPosition(Vector2f pos) {
+        void setPosition(sf::Vector2f pos) {
             sprite.setPosition(pos);
         }
 
-        Sprite& getSprite() {
+        sf::Sprite& getSprite() {
             return sprite;
         }
 
-        Color getColor() const {
+        sf::Color getColor() const {
             return color;
         }
 
@@ -38,9 +36,9 @@ class Player : public ILevelObject, public ICollidable
                 Collision::BoundingBoxTest(sprite, other.getSprite());
         }
 
-        void update(Level& level, Time delta);
+        void update(Level& level, sf::Time delta);
 
-        void draw(RenderTarget& target, RenderStates states) const;
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 
 #endif // PLAYER_H

@@ -5,19 +5,17 @@
 #include <SFML/Graphics.hpp>
 #include "ILevelObject.h"
 
-using namespace sf;
-
 class ILevelObject;
 
-class Level : public Drawable
+class Level : public sf::Drawable
 {
     std::vector<std::shared_ptr<ILevelObject>> objects;
 
     public:
         Level();
 
-        void update(Time delta);
-        void draw(RenderTarget& target, RenderStates states) const;
+        void update(sf::Time delta);
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 
 #endif // LEVEL_H

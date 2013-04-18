@@ -16,18 +16,18 @@
 class Block: public ICollidable, public ILevelObject
 {
 public:
-    Color getColor() const {return color;}
-    Vector2f getPosition() const {return position;}
-    Block(Vector2f pos, Color c);
-    void draw(RenderTarget& target, RenderStates states) const;
-    void setPosition(Vector2f pos);
+    sf::Color getColor() const {return color;}
+    sf::Vector2f getPosition() const {return position;}
+    Block(sf::Vector2f pos, sf::Color c);
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void setPosition(sf::Vector2f pos);
     bool isCollidingWith(ICollidable& other) const;
-    void update(Level& level, Time delta);
-    Sprite& getSprite();
+    void update(Level& level, sf::Time delta);
+    sf::Sprite& getSprite();
 private:
-    Vector2f position;
-    Color color;
-    Sprite sprite;
+    sf::Vector2f position;
+    sf::Color color;
+    sf::Sprite sprite;
 };
 
 #endif /* defined(__filament__Block__) */
