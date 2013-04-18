@@ -8,9 +8,15 @@ class ICollidable
 {
     public:
         virtual ~ICollidable() {}
-        virtual sf::Sprite& getSprite() = 0;
+
+        virtual int getCollisionType() const = 0;
+        virtual sf::FloatRect getCollisionBox() const = 0;
         virtual sf::Color getColor() const = 0;
-        virtual bool isCollidingWith(ICollidable& other) const = 0;
+
+        bool isCollidingWith(ICollidable& other) const {
+            return getColor() != other.getColor() &&
+                getCollisionBox().intersects(other.getCollisionBox());
+        };
 };
 
 #endif // ICOLLIDABLE_H

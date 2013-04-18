@@ -1,14 +1,13 @@
 #include "Player.h"
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "TextureManager.h"
 
 using namespace sf;
 
-Player::Player()
+Player::Player() : Entity(Color::Red)
 {
-    color = Color::Red;
-
     Texture* tex = texManager.getResource("/CS 2804/filament/res/dude.png");
     sprite.setTexture(*tex);
     sprite.setPosition(20, 30);
@@ -26,8 +25,4 @@ void Player::update(Level& level, Time delta) {
         diff.y = 0.2f * delta.asMilliseconds();
 
     sprite.move(diff);
-}
-
-void Player::draw(RenderTarget& target, RenderStates states) const {
-    target.draw(sprite);
 }
