@@ -14,8 +14,6 @@ class Entity : public ILevelObject, public ICollidable
         Entity() : sprite(), color(127, 127, 127) {}
         Entity(sf::Color c) : sprite(), color(c) {}
 
-        virtual int getCollisionType() const = 0;
-
         sf::Vector2f getPosition() const override {
             return sprite.getPosition();
         }

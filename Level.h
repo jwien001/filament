@@ -4,12 +4,14 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include "ILevelObject.h"
+#include "CollisionManager.h"
 
 class ILevelObject;
 
 class Level : public sf::Drawable
 {
     std::vector<std::shared_ptr<ILevelObject>> objects;
+    CollisionManager colManager;
 
     public:
         Level();

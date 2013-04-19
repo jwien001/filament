@@ -14,13 +14,7 @@
 class Block : public Entity
 {
 public:
-    const static int COLLISION_TYPE = 2;
-
     Block(sf::Vector2f pos, sf::Color c);
-
-    int getCollisionType() const override {
-        return COLLISION_TYPE;
-    }
 };
 
 #endif /* defined(__filament__Block__) */

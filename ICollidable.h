@@ -9,7 +9,6 @@ class ICollidable
     public:
         virtual ~ICollidable() {}
 
-        virtual int getCollisionType() const = 0;
         virtual sf::FloatRect getCollisionBox() const = 0;
         virtual sf::Color getColor() const = 0;
 
