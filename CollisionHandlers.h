@@ -8,7 +8,7 @@ typedef void (*CollisionHandler)(ICollidable&, ICollidable&);
 class CollisionHandlers
 {
     public:
-        static void PlayerBlockHandler(ICollidable& a, ICollidable& b);
+        static void PlayerBlockHandler(ICollidable& player, ICollidable& block);
 };
 
 #endif // COLLISIONHANDLERS_H
