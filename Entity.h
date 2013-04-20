@@ -14,11 +14,11 @@ class Entity : public ILevelObject, public ICollidable
         Entity() : sprite(), color(127, 127, 127) {}
         Entity(sf::Color c) : sprite(), color(c) {}
 
-        sf::Vector2f getPosition() const override {
+        const sf::Vector2f& getPosition() const override {
             return sprite.getPosition();
         }
 
-        void setPosition(sf::Vector2f pos) override {
+        void setPosition(const sf::Vector2f& pos) override {
             sprite.setPosition(pos);
         }
 
@@ -26,7 +26,7 @@ class Entity : public ILevelObject, public ICollidable
             return sprite.getGlobalBounds();
         }
 
-        sf::Color getColor() const override {
+        const sf::Color& getColor() const override {
             return color;
         }
 

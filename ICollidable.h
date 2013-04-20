@@ -10,7 +10,7 @@ class ICollidable
         virtual ~ICollidable() {}
 
         virtual sf::FloatRect getCollisionBox() const = 0;
-        virtual sf::Color getColor() const = 0;
+        virtual const sf::Color& getColor() const = 0;
 
         bool isCollidingWith(ICollidable& other) const {
             return getColor() != other.getColor() &&
