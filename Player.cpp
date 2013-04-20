@@ -6,23 +6,39 @@
 
 using namespace sf;
 
-Player::Player() : Entity(Color::Red)
+const float Player::SPEED = 3;
+const float Player::JUMP = 9;
+const float Player::GRAVITY = 0.03;
+
+Player::Player() : Entity(Color::Red), oldPosition(), airborne(true), jumping(false)
 {
     Texture* tex = texManager.getResource("/CS 2804/filament/res/dude.png");
     sprite.setTexture(*tex);
     sprite.setPosition(20, 30);
+    oldPosition = Vector2f(20, 30);
 }
 
 void Player::update(Level& level, Time delta) {
-    Vector2f diff;
-    if(Keyboard::isKeyPressed(Keyboard::A))
-        diff.x = -0.2f * delta.asMilliseconds();
-    if(Keyboard::isKeyPressed(Keyboard::D))
-        diff.x = 0.2f * delta.asMilliseconds();
-    if(Keyboard::isKeyPressed(Keyboard::W))
-        diff.y = -0.2f * delta.asMilliseconds();
-    if(Keyboard::isKeyPressed(Keyboard::S))
-        diff.y = 0.2f * delta.asMilliseconds();
+    Vector2f pos = getPosition();
+    oldPosition.x = pos.x;
 
-    sprite.move(diff);
+    if (Keyboard::isKeyPressed(Keyboard::A))
+        oldPosition.x += SPEED;
+    if (Keyboard::isKeyPressed(Keyboard::D))
+        oldPosition.x -= SPEED;
+    if (Keyboard::isKeyPressed(Keyboard::W) && !airborne && !jumping) {
+        oldPosition.y += JUMP;
+        jumping = true;
+    }
+    if (!Keyboard::isKeyPressed(Keyboard::W))
+        jumping = false;
+
+    int dt = delta.asMilliseconds();
+    float newX = pos.x + (pos.x - oldPosition.x);
+    float newY = pos.y + (pos.y - oldPosition.y) + (GRAVITY * dt);
+
+    setOldPosition(pos);
+    setPosition(Vector2f(newX, newY));
+
+    airborne = true;
 }

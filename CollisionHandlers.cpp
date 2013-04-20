@@ -1,3 +1,6 @@
+#include <iostream>
+#include <algorithm>
+#include <utility>
 #include "CollisionHandlers.h"
 #include "Player.h"
 #include "Block.h"
@@ -16,34 +19,24 @@ void CollisionHandlers::PlayerBlockHandler(ICollidable& p, ICollidable& b) {
     FloatRect blockBox = block.getCollisionBox();
 
     //Calculate the best (shortest) distance and direction to move the player so that it is out of the block
-    Vector2f bestDir;
-    float bestScale, testScale;
+    Vector2f left(-1, 0);
+    Vector2f right(1, 0);
+    Vector2f up(0, -1);
+    Vector2f down(0, 1);
 
-    //Left
-    bestDir = Vector2f(-1, 0);
-    bestScale = (playerBox.left + playerBox.width) - blockBox.left;
+    std::pair<float, Vector2f> dirs[4];
+    dirs[0] = std::make_pair((playerBox.left + playerBox.width) - blockBox.left, left);
+    dirs[1] = std::make_pair((blockBox.left + blockBox.width) - playerBox.left, right);
+    dirs[2] = std::make_pair((playerBox.top + playerBox.height) - blockBox.top, up);
+    dirs[3] = std::make_pair((blockBox.top + blockBox.height) - playerBox.top, down);
 
-    //Right
-    testScale = (blockBox.left + blockBox.width) - playerBox.left;
-    if (testScale > 0 && testScale < bestScale) {
-        bestDir = Vector2f(1, 0);
-        bestScale = testScale;
-    }
+    auto bestDir = *std::min_element(begin(dirs), end(dirs),
+            [](const std::pair<float, Vector2f>& a, const std::pair<float, Vector2f>& b){ return a.first < b.first; });
 
-    //Up
-    testScale = (playerBox.top + playerBox.height) - blockBox.top;
-    if (testScale > 0 && testScale < bestScale) {
-        bestDir = Vector2f(0, -1);
-        bestScale = testScale;
-    }
-
-    //Down
-    testScale = (blockBox.top + blockBox.height) - playerBox.top;
-    if (testScale > 0 && testScale < bestScale) {
-        bestDir = Vector2f(0, 1);
-        bestScale = testScale;
-    }
+    //If the player needs to be moved up, it collided with a block below it, so it is no longer airborne
+    if (bestDir.second == up)
+        player.setAirborne(false);
 
     //Move player out of block
-    player.setPosition(player.getPosition() + (bestDir * bestScale));
+    player.setPosition(player.getPosition() + (bestDir.first * bestDir.second));
 }
