@@ -4,9 +4,11 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include "ILevelObject.h"
+#include "Entity.h"
 #include "CollisionManager.h"
 
 class ILevelObject;
+class Entity;
 
 class Level : public sf::Drawable
 {
@@ -17,7 +19,9 @@ class Level : public sf::Drawable
         Level();
 
         void update(sf::Time delta);
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+        void addEntity(std::shared_ptr<Entity> obj);
 };
 
 #endif // LEVEL_H

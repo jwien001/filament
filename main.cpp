@@ -1,8 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 #include <iostream>
+#include <memory>
 #include "Block.h"
 #include "TextureManager.h"
+#include "Player.h"
 #include "Level.h"
 
 
@@ -15,7 +17,9 @@ int main()
 
     sf::Clock clock;
 
+    shared_ptr<Player> player{new Player};
     Level level;
+    level.addEntity(player);
 
     while (window.isOpen())
     {
@@ -29,7 +33,7 @@ int main()
 
         level.update(delta);
 
-        window.clear(sf::Color(255, 255, 255, 0));
+        window.clear(sf::Color::White);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_EQUIV);
 
