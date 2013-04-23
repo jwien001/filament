@@ -3,30 +3,41 @@
 
 #include <memory>
 #include <SFML/Graphics.hpp>
-#include "Entity.h"
 #include "CollisionManager.h"
 
 class ILevelObject;
 class Entity;
+class Player;
 
 class Level : public sf::Drawable
 {
-    static const int BLOCK_SIZE;
-
     std::vector<std::shared_ptr<ILevelObject>> objects;
     CollisionManager colManager;
     sf::Vector2f levelSize;
+    std::shared_ptr<Player> player;
+    char transition;
 
     public:
+        static const float BLOCK_SIZE;
+
         Level(std::string levelFile);
 
         void update(sf::Time delta);
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-        void addEntity(std::shared_ptr<Entity> obj);
+        void setPlayer(std::shared_ptr<Player> player);
+        void addEntity(std::shared_ptr<Entity> ent);
 
         const sf::Vector2f& getSize() const {
             return levelSize;
+        }
+
+        const char& getTransition() const {
+            return transition;
+        }
+
+        void setTransition(const char& trans) {
+            transition = trans;
         }
 
     private:

@@ -4,6 +4,7 @@
 #include "CollisionHandlers.h"
 #include "Player.h"
 #include "Block.h"
+#include "Door.h"
 
 using namespace sf;
 
@@ -39,4 +40,13 @@ void CollisionHandlers::PlayerBlockHandler(ICollidable& p, ICollidable& b) {
 
     //Move player out of block
     player.setPosition(player.getPosition() + (bestDir.first * bestDir.second));
+}
+
+void CollisionHandlers::PlayerDoorHandler(ICollidable& p, ICollidable& d) {
+    //Objects may no longer be colliding, so double check
+    if (!p.isCollidingWith(d))
+        return;
+
+    Door& door = dynamic_cast<Door&>(d);
+    door.setActivated(true);
 }

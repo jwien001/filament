@@ -9,6 +9,7 @@ class CollisionHandlers
 {
     public:
         static void PlayerBlockHandler(ICollidable& player, ICollidable& block);
+        static void PlayerDoorHandler(ICollidable& player, ICollidable& door);
 };
 
 #endif // COLLISIONHANDLERS_H

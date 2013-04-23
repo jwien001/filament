@@ -1,41 +1,54 @@
 #include <iostream>
 #include <fstream>
+#include <iterator>
+#include <algorithm>
 #include "Level.h"
 #include "Player.h"
 #include "Block.h"
+#include "Door.h"
 
 using namespace std;
 using namespace sf;
 
-const int Level::BLOCK_SIZE = 32;
+const float Level::BLOCK_SIZE = 32;
 
-Level::Level(string levelFile) : objects(), colManager(), levelSize() {
+Level::Level(string levelFile) : objects(), colManager(), levelSize(),
+        player(), transition() {
     ifstream file("/CS 2804/filament/res/map/" + levelFile);
 
     if (file.is_open()) {
-        string line;
-        getline(file, line);
+        vector<string> lines;
 
-        int y = 0, x;
-        while (!file.eof()) {
-            x = 0;
-            for (char& c : line) {
-                createObject(c, Vector2f(x, y));
-                ++x;
+        copy(istream_iterator<string>(file), istream_iterator<string>(), back_inserter(lines));
+
+        int width = lines[0].length();
+        int height = lines.size();
+        levelSize = Vector2f(width, height);
+
+        char mapData[width][height];
+
+        for (int y=0; y<height; ++y)
+            for (int x=0; x<width; ++x)
+                mapData[x][y] = lines[y][x];
+
+        for (int y=0; y<height; ++y) {
+            for (int x=0; x<width; ++x) {
+                if (mapData[x][y] == 'd') {
+                    addEntity(shared_ptr<Door>{new Door(Vector2f(x, y) * BLOCK_SIZE, mapData[x][y+1])});
+                    mapData[x][y+1] = '.';
+                }
+                else
+                    createObject(mapData[x][y], Vector2f(x, y));
             }
-
-            line.clear();
-            getline(file, line);
-            ++y;
         }
-        levelSize = Vector2f(x, y) * (float)BLOCK_SIZE;
 
         colManager.addHandler<Player, Block>(&CollisionHandlers::PlayerBlockHandler);
+        colManager.addHandler<Player, Door>(&CollisionHandlers::PlayerDoorHandler);
     }
 }
 
 void Level::createObject(char c, Vector2f pos) {
-    pos *= (float)BLOCK_SIZE;
+    pos *= BLOCK_SIZE;
 
     shared_ptr<ILevelObject> lvlObj;
     shared_ptr<ICollidable> coll;
@@ -53,7 +66,7 @@ void Level::createObject(char c, Vector2f pos) {
             break;
         case '.':
             break;
-        default:
+        default:;
             cout << "Invalid character in level file: " << c << endl;
     }
 
@@ -61,6 +74,13 @@ void Level::createObject(char c, Vector2f pos) {
     else if (coll){}
     else if (ent)
         addEntity(ent);
+}
+
+void Level::setPlayer(shared_ptr<Player> plyr) {
+    if (player)
+        colManager.removeCollidable(plyr);
+    player = plyr;
+    colManager.addCollidable(plyr);
 }
 
 void Level::addEntity(shared_ptr<Entity> ent) {
@@ -72,6 +92,7 @@ void Level::update(Time delta) {
     for (shared_ptr<ILevelObject> obj : objects) {
         obj->update(*this, delta);
     }
+    player->update(*this, delta);
 
     colManager.processCollisions();
 }
@@ -80,4 +101,5 @@ void Level::draw(RenderTarget& target, RenderStates states) const {
     for (shared_ptr<ILevelObject> obj : objects) {
         target.draw(*obj);
     }
+    target.draw(*player);
 }
