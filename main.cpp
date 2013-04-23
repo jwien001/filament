@@ -23,8 +23,7 @@ int main()
     sf::Clock clock;
 
     shared_ptr<Player> player{new Player};
-    Level level("level1.txt");
-    level.setPlayer(player);
+    Level level('1', player);
 
     while (window.isOpen())
     {
@@ -38,13 +37,8 @@ int main()
 
         level.update(delta);
 
-        if (level.getTransition() != '\0') {
-            stringstream ss;
-            ss << "level" << level.getTransition() << ".txt";
-            level = Level(ss.str());
-            level.setPlayer(player);
-            player->setPosition(sf::Vector2f(40, 40));
-            player->setOldPosition(sf::Vector2f(40, 40));
+        if (level.getDestination() != '\0') {
+            level = Level(level.getDestination(), player, level.getId());
             continue;
         }
 

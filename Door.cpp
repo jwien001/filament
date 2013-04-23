@@ -12,5 +12,5 @@ Door::Door(Vector2f pos, char c) : Entity(), id(c), activated(false)
 
 void Door::update(Level& level, sf::Time delta) {
     if (activated)
-        level.setTransition(id);
+        level.setDestination(id);
 }

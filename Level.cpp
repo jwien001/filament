@@ -12,9 +12,11 @@ using namespace sf;
 
 const float Level::BLOCK_SIZE = 32;
 
-Level::Level(string levelFile) : objects(), colManager(), levelSize(),
-        player(), transition() {
-    ifstream file("/CS 2804/filament/res/map/" + levelFile);
+Level::Level(char level, shared_ptr<Player> plyr, char src) : id(level), objects(), colManager(),
+        levelSize(), player(plyr), destination('\0') {
+    stringstream ss;
+    ss << "/CS 2804/filament/res/map/level" << id << ".txt";
+    ifstream file(ss.str());
 
     if (file.is_open()) {
         vector<string> lines;
@@ -36,12 +38,21 @@ Level::Level(string levelFile) : objects(), colManager(), levelSize(),
                 if (mapData[x][y] == 'd') {
                     addEntity(shared_ptr<Door>{new Door(Vector2f(x, y) * BLOCK_SIZE, mapData[x][y+1])});
                     mapData[x][y+1] = '.';
+                } else if (mapData[x][y] == 'p') {
+                    if (mapData[x][y+1] == src) {
+                        Vector2f pos = Vector2f(x, y + 2) * BLOCK_SIZE;
+                        pos.y = pos.y - player->getCollisionBox().height;
+                        player->setPosition(pos);
+                        player->setOldPosition(pos);
+                    }
+                    mapData[x][y+1] = '.';
                 }
                 else
                     createObject(mapData[x][y], Vector2f(x, y));
             }
         }
 
+        colManager.addCollidable(plyr);
         colManager.addHandler<Player, Block>(&CollisionHandlers::PlayerBlockHandler);
         colManager.addHandler<Player, Door>(&CollisionHandlers::PlayerDoorHandler);
     }
@@ -74,13 +85,6 @@ void Level::createObject(char c, Vector2f pos) {
     else if (coll){}
     else if (ent)
         addEntity(ent);
-}
-
-void Level::setPlayer(shared_ptr<Player> plyr) {
-    if (player)
-        colManager.removeCollidable(plyr);
-    player = plyr;
-    colManager.addCollidable(plyr);
 }
 
 void Level::addEntity(shared_ptr<Entity> ent) {

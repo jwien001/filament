@@ -11,33 +11,37 @@ class Player;
 
 class Level : public sf::Drawable
 {
+    char id;
     std::vector<std::shared_ptr<ILevelObject>> objects;
     CollisionManager colManager;
     sf::Vector2f levelSize;
     std::shared_ptr<Player> player;
-    char transition;
+    char destination;
 
     public:
         static const float BLOCK_SIZE;
 
-        Level(std::string levelFile);
+        Level(char level, std::shared_ptr<Player> player, char src = '\0');
 
         void update(sf::Time delta);
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-        void setPlayer(std::shared_ptr<Player> player);
         void addEntity(std::shared_ptr<Entity> ent);
 
         const sf::Vector2f& getSize() const {
             return levelSize;
         }
 
-        const char& getTransition() const {
-            return transition;
+        const char& getId() const {
+            return id;
         }
 
-        void setTransition(const char& trans) {
-            transition = trans;
+        const char& getDestination() const {
+            return destination;
+        }
+
+        void setDestination(const char& dest) {
+            destination = dest;
         }
 
     private:
