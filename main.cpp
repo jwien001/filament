@@ -12,10 +12,12 @@ using namespace std;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "My First SFML Game");
+    const sf::Vector2f screenSize(800, 600);
+
+    sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Filament Demo");
     window.setFramerateLimit(60);
 
-    sf::View view(sf::FloatRect(0, 0, 800, 600));
+    sf::View view(sf::FloatRect(0, 0, screenSize.x, screenSize.y));
     view.setViewport(sf::FloatRect(0, 0, 1, 1));
 
     sf::Clock clock;
@@ -36,7 +38,18 @@ int main()
 
         level.update(delta);
 
-        view.setCenter(sf::Vector2f(player->getCenter())); //Must invoke copy constuctor, otherwise center data is lost
+        Vector2f center = player->getCenter();
+        Vector2f levelSize = level.getSize();
+        if (center.x < screenSize.x / 2)
+            center.x = screenSize.x / 2;
+        else if (center.x > levelSize.x - screenSize.x / 2)
+            center.x = levelSize.x - screenSize.x / 2;
+        if (center.y < screenSize.y / 2)
+            center.y = screenSize.y / 2;
+        else if (center.y > levelSize.y - screenSize.y / 2)
+            center.y = levelSize.y - screenSize.y / 2;
+        view.setCenter(center);
+
         window.setView(view);
         window.clear(sf::Color::White);
         glEnable(GL_COLOR_LOGIC_OP);

@@ -25,6 +25,10 @@ class Level : public sf::Drawable
 
         void addEntity(std::shared_ptr<Entity> obj);
 
+        const sf::Vector2f& getSize() const {
+            return levelSize;
+        }
+
     private:
         void createObject(char c, sf::Vector2f pos);
 };
