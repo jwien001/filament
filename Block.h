@@ -14,7 +14,7 @@
 class Block : public Entity
 {
 public:
-    Block(sf::Vector2f pos, sf::Color c);
+    Block(sf::Vector2f pos, sf::Color c = sf::Color(127, 127, 127));
 };
 
 #endif /* defined(__filament__Block__) */

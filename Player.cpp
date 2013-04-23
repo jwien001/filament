@@ -12,10 +12,10 @@ const float Player::GRAVITY = 0.03;
 
 Player::Player() : Entity(Color::Red), oldPosition(), airborne(true), jumping(false)
 {
-    Texture* tex = texManager.getResource("/CS 2804/filament/res/dude.png");
+    Texture* tex = texManager.getResource("/CS 2804/filament/res/img/dude.png");
     sprite.setTexture(*tex);
-    sprite.setPosition(20, 30);
-    oldPosition = Vector2f(20, 30);
+    sprite.setPosition(40, 40);
+    oldPosition = Vector2f(40, 40);
 }
 
 void Player::update(Level& level, Time delta) {

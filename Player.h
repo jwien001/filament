@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <iostream>
 #include "Entity.h"
 
 class Player : public Entity
@@ -41,6 +42,11 @@ class Player : public Entity
 
         void setOldPosition(const sf::Vector2f& oldPos) {
             oldPosition = oldPos;
+        }
+
+        const sf::Vector2f& getCenter() const {
+            sf::FloatRect box = sprite.getGlobalBounds();
+            return sf::Vector2f(box.left + box.width/2, box.top + box.height/2);
         }
 };
 

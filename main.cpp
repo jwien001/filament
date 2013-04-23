@@ -15,10 +15,13 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 600), "My First SFML Game");
     window.setFramerateLimit(60);
 
+    sf::View view(sf::FloatRect(0, 0, 800, 600));
+    view.setViewport(sf::FloatRect(0, 0, 1, 1));
+
     sf::Clock clock;
 
     shared_ptr<Player> player{new Player};
-    Level level;
+    Level level("level1.txt");
     level.addEntity(player);
 
     while (window.isOpen())
@@ -33,6 +36,8 @@ int main()
 
         level.update(delta);
 
+        view.setCenter(sf::Vector2f(player->getCenter())); //Must invoke copy constuctor, otherwise center data is lost
+        window.setView(view);
         window.clear(sf::Color::White);
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_EQUIV);

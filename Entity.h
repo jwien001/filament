@@ -11,8 +11,7 @@ class Entity : public ILevelObject, public ICollidable
         sf::Color color;
 
     public:
-        Entity() : sprite(), color(127, 127, 127) {}
-        Entity(sf::Color c) : sprite(), color(c) {}
+        Entity(sf::Color c = sf::Color(127, 127, 127)) : sprite(), color(c) {}
 
         const sf::Vector2f& getPosition() const override {
             return sprite.getPosition();

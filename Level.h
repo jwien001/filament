@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <SFML/Graphics.hpp>
-#include "ILevelObject.h"
 #include "Entity.h"
 #include "CollisionManager.h"
 
@@ -12,16 +11,22 @@ class Entity;
 
 class Level : public sf::Drawable
 {
+    static const int BLOCK_SIZE;
+
     std::vector<std::shared_ptr<ILevelObject>> objects;
     CollisionManager colManager;
+    sf::Vector2f levelSize;
 
     public:
-        Level();
+        Level(std::string levelFile);
 
         void update(sf::Time delta);
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
         void addEntity(std::shared_ptr<Entity> obj);
+
+    private:
+        void createObject(char c, sf::Vector2f pos);
 };
 
 #endif // LEVEL_H

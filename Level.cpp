@@ -1,32 +1,75 @@
 #include <iostream>
+#include <fstream>
 #include "Level.h"
 #include "Player.h"
 #include "Block.h"
 
+using namespace std;
 using namespace sf;
 
-Level::Level() : objects(), colManager() {
-    std::shared_ptr<Block> block{new Block(Vector2f(20,200), Color::Black)};
-    std::shared_ptr<Block> block2{new Block(Vector2f(20+192,200-64), Color::Black)};
-    std::shared_ptr<Block> block3{new Block(Vector2f(20+128,200), Color::Black)};
+const int Level::BLOCK_SIZE = 32;
 
-    objects.push_back(block);
-    objects.push_back(block2);
-    objects.push_back(block3);
+Level::Level(string levelFile) : objects(), colManager(), levelSize() {
+    ifstream file("/CS 2804/filament/res/map/" + levelFile);
 
-    colManager.addCollidable(block);
-    colManager.addCollidable(block2);
-    colManager.addCollidable(block3);
-    colManager.addHandler<Player, Block>(&CollisionHandlers::PlayerBlockHandler);
+    if (file.is_open()) {
+        string line;
+        getline(file, line);
+
+        int y = 0, x;
+        while (!file.eof()) {
+            x = 0;
+            for (char& c : line) {
+                createObject(c, Vector2f(x, y));
+                ++x;
+            }
+
+            line.clear();
+            getline(file, line);
+            ++y;
+        }
+        levelSize = Vector2f(x, y) * (float)BLOCK_SIZE;
+
+        colManager.addHandler<Player, Block>(&CollisionHandlers::PlayerBlockHandler);
+    }
 }
 
-void Level::addEntity(std::shared_ptr<Entity> ent) {
+void Level::createObject(char c, Vector2f pos) {
+    pos *= (float)BLOCK_SIZE;
+
+    shared_ptr<ILevelObject> lvlObj;
+    shared_ptr<ICollidable> coll;
+    shared_ptr<Entity> ent;
+
+    switch (c) {
+        case '0':
+            ent = shared_ptr<Block>(new Block(pos));
+            break;
+        case '1':
+            ent = shared_ptr<Block>(new Block(pos, Color::Black));
+            break;
+        case '2':
+            ent = shared_ptr<Block>(new Block(pos, Color::Red));
+            break;
+        case '.':
+            break;
+        default:
+            cout << "Invalid character in level file: " << c << endl;
+    }
+
+    if (lvlObj){}
+    else if (coll){}
+    else if (ent)
+        addEntity(ent);
+}
+
+void Level::addEntity(shared_ptr<Entity> ent) {
     objects.push_back(ent);
     colManager.addCollidable(ent);
 }
 
 void Level::update(Time delta) {
-    for (std::shared_ptr<ILevelObject> obj : objects) {
+    for (shared_ptr<ILevelObject> obj : objects) {
         obj->update(*this, delta);
     }
 
@@ -34,7 +77,7 @@ void Level::update(Time delta) {
 }
 
 void Level::draw(RenderTarget& target, RenderStates states) const {
-    for (std::shared_ptr<ILevelObject> obj : objects) {
+    for (shared_ptr<ILevelObject> obj : objects) {
         target.draw(*obj);
     }
 }
