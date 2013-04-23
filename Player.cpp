@@ -6,9 +6,9 @@
 
 using namespace sf;
 
-const float Player::SPEED = 3;
-const float Player::JUMP = 9;
-const float Player::GRAVITY = 0.03;
+const float Player::SPEED = 4;
+const float Player::JUMP = 12;
+const float Player::GRAVITY = 0.035;
 
 Player::Player() : Entity(Color::Red), oldPosition(), airborne(true), jumping(false)
 {
