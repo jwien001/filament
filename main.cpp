@@ -34,7 +34,7 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
             else {
-                player->handleEvent(event);
+                player->handleEvent(event, level);
             }
         }
 

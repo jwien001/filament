@@ -12,7 +12,7 @@ class Player;
 class Level : public sf::Drawable
 {
     char id;
-    std::vector<std::shared_ptr<ILevelObject>> objects;
+    std::forward_list<std::shared_ptr<ILevelObject>> objects;
     CollisionManager colManager;
     sf::Vector2f levelSize;
     std::shared_ptr<Player> player;
@@ -26,7 +26,12 @@ class Level : public sf::Drawable
         void update(sf::Time delta);
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+        void addLevelObject(std::shared_ptr<ILevelObject> lvlObj);
+        void addCollidable(std::shared_ptr<ICollidable> coll);
         void addEntity(std::shared_ptr<Entity> ent);
+
+        void removeLevelObject(std::shared_ptr<ILevelObject> lvlObj);
+        void removeCollidable(std::shared_ptr<ICollidable> coll);
 
         const sf::Vector2f& getSize() const {
             return levelSize;

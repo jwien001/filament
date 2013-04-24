@@ -87,9 +87,25 @@ void Level::createObject(char c, Vector2f pos) {
         addEntity(ent);
 }
 
+void Level::addLevelObject(std::shared_ptr<ILevelObject> lvlObj) {
+    objects.push_front(lvlObj);
+}
+
+void Level::addCollidable(std::shared_ptr<ICollidable> coll) {
+    colManager.addCollidable(coll);
+}
+
 void Level::addEntity(shared_ptr<Entity> ent) {
-    objects.push_back(ent);
-    colManager.addCollidable(ent);
+    addLevelObject(ent);
+    addCollidable(ent);
+}
+
+void Level::removeLevelObject(std::shared_ptr<ILevelObject> lvlObj) {
+    objects.remove(lvlObj);
+}
+
+void Level::removeCollidable(std::shared_ptr<ICollidable> coll) {
+    colManager.removeCollidable(coll);
 }
 
 void Level::update(Time delta) {

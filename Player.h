@@ -6,6 +6,8 @@
 #include "Block.h"
 #include "TextureManager.h"
 
+class Beam;
+
 struct ColorHash
 {
     std::size_t operator()(const sf::Color c) const {
@@ -30,12 +32,13 @@ class Player : public Entity
     int colorIndex;
     bool airborne;
     bool phasing;
+    std::shared_ptr<Beam> beam;
 
     public:
         Player();
 
         void update(Level& level, sf::Time delta) override;
-        void handleEvent(sf::Event& event);
+        void handleEvent(sf::Event& event, Level& level);
 
         void setAirborne(bool a) {
             airborne = a;
