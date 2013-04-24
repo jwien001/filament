@@ -3,6 +3,15 @@
 
 #include <iostream>
 #include "Entity.h"
+#include "Block.h"
+#include "TextureManager.h"
+
+struct ColorHash
+{
+    std::size_t operator()(const sf::Color c) const {
+        return (c.r << 16) | (c.g << 8) | c.b;
+    }
+};
 
 class Player : public Entity
 {
@@ -14,23 +23,19 @@ class Player : public Entity
     //GRAVITY determines how fast the Player falls
     static const float GRAVITY;
 
+    static std::vector<sf::Color> colorList;
+    static std::unordered_map<sf::Color, std::string, ColorHash> texMap;
+
     sf::Vector2f oldPosition;
+    int colorIndex;
     bool airborne;
+    bool phasing;
     bool jumping;
 
     public:
         Player();
 
         void update(Level& level, sf::Time delta) override;
-
-        /**
-         * Returns whether the Player is in the air or not.
-         * This value is only valid from adfter all collisions have been processed
-         * until the end of the Player's subsequent update cycle.
-         */
-        bool isAirborne() const {
-            return airborne;
-        }
 
         void setAirborne(bool a) {
             airborne = a;
@@ -47,6 +52,28 @@ class Player : public Entity
         const sf::Vector2f& getCenter() const {
             sf::FloatRect box = sprite.getGlobalBounds();
             return sf::Vector2f(box.left + box.width/2, box.top + box.height/2);
+        }
+
+        const sf::Color& getColor() const override {
+            return colorList[colorIndex];
+        }
+
+        bool isCollidingWith(ICollidable& other) override {
+            if (getCollisionBox().intersects(other.getCollisionBox())) {
+                if (getColor() != other.getColor())
+                    return true;
+
+                phasing = true;
+            }
+            return false;
+        };
+
+    private:
+        void nextColor() {
+            if (++colorIndex >= colorList.size())
+                colorIndex = 0;
+            sf::Texture* tex = texManager.getResource(texMap[colorList[colorIndex]]);
+            sprite.setTexture(*tex);
         }
 };
 

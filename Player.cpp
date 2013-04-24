@@ -2,7 +2,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "TextureManager.h"
 
 using namespace sf;
 
@@ -10,10 +9,15 @@ const float Player::SPEED = 4;
 const float Player::JUMP = 12;
 const float Player::GRAVITY = 0.035;
 
-Player::Player() : Entity(Color::Red), oldPosition(), airborne(true), jumping(false)
+std::vector<sf::Color> Player::colorList = {Color::Black, Color::Red};
+std::unordered_map<Color, std::string, ColorHash> Player::texMap = {
+    {Color::Black, "/CS 2804/filament/res/img/black_dude.png"},
+    {Color::Red, "/CS 2804/filament/res/img/red_dude.png"}
+};
+
+Player::Player() : Entity(), oldPosition(), colorIndex(-1), phasing(false), airborne(true), jumping(false)
 {
-    Texture* tex = texManager.getResource("/CS 2804/filament/res/img/dude.png");
-    sprite.setTexture(*tex);
+    nextColor();
     sprite.setPosition(40, 40);
     oldPosition = Vector2f(40, 40);
 }
@@ -32,6 +36,8 @@ void Player::update(Level& level, Time delta) {
     }
     if (!Keyboard::isKeyPressed(Keyboard::W))
         jumping = false;
+    if (Keyboard::isKeyPressed(Keyboard::Space) && !phasing)
+        nextColor();
 
     int dt = delta.asMilliseconds();
     float newX = pos.x + (pos.x - oldPosition.x);
@@ -41,4 +47,5 @@ void Player::update(Level& level, Time delta) {
     setPosition(Vector2f(newX, newY));
 
     airborne = true;
+    phasing = false;
 }
