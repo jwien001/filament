@@ -15,7 +15,7 @@ std::unordered_map<Color, std::string, ColorHash> Player::texMap = {
     {Color::Red, "/CS 2804/filament/res/img/red_dude.png"}
 };
 
-Player::Player() : Entity(), oldPosition(), colorIndex(-1), phasing(false), airborne(true), jumping(false)
+Player::Player() : Entity(), oldPosition(), colorIndex(-1), phasing(false), airborne(true)
 {
     nextColor();
     sprite.setPosition(40, 40);
@@ -30,14 +30,6 @@ void Player::update(Level& level, Time delta) {
         oldPosition.x += SPEED;
     if (Keyboard::isKeyPressed(Keyboard::D))
         oldPosition.x -= SPEED;
-    if (Keyboard::isKeyPressed(Keyboard::W) && !airborne && !jumping) {
-        oldPosition.y += JUMP;
-        jumping = true;
-    }
-    if (!Keyboard::isKeyPressed(Keyboard::W))
-        jumping = false;
-    if (Keyboard::isKeyPressed(Keyboard::Space) && !phasing)
-        nextColor();
 
     int dt = delta.asMilliseconds();
     float newX = pos.x + (pos.x - oldPosition.x);
@@ -48,4 +40,13 @@ void Player::update(Level& level, Time delta) {
 
     airborne = true;
     phasing = false;
+}
+
+void Player::handleEvent(Event& event) {
+    if (event.type == Event::KeyPressed) {
+        if (event.key.code == Keyboard::W && !airborne)
+            oldPosition.y += JUMP;
+        else if (event.key.code == Keyboard::Space && !phasing)
+            nextColor();
+    }
 }

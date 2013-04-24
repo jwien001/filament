@@ -30,12 +30,12 @@ class Player : public Entity
     int colorIndex;
     bool airborne;
     bool phasing;
-    bool jumping;
 
     public:
         Player();
 
         void update(Level& level, sf::Time delta) override;
+        void handleEvent(sf::Event& event);
 
         void setAirborne(bool a) {
             airborne = a;
