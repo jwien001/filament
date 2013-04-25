@@ -9,13 +9,13 @@
 
 using namespace sf;
 
-void CollisionHandlers::PlayerBlockHandler(ICollidable& p, ICollidable& b) {
+void CollisionHandlers::PlayerBlockHandler(std::shared_ptr<ICollidable> p, std::shared_ptr<ICollidable> b, Level& level) {
     //Objects may no longer be colliding, so double check
-    if (!p.isCollidingWith(b))
+    if (!p->isCollidingWith(*b))
         return;
 
-    Player& player = dynamic_cast<Player&>(p);
-    Block& block = dynamic_cast<Block&>(b);
+    Player& player = dynamic_cast<Player&>(*p);
+    Block& block = dynamic_cast<Block&>(*b);
 
     FloatRect playerBox = player.getCollisionBox();
     FloatRect blockBox = block.getCollisionBox();
@@ -43,21 +43,27 @@ void CollisionHandlers::PlayerBlockHandler(ICollidable& p, ICollidable& b) {
     player.setPosition(player.getPosition() + (bestDir.first * bestDir.second));
 }
 
-void CollisionHandlers::PlayerDoorHandler(ICollidable& p, ICollidable& d) {
+void CollisionHandlers::PlayerDoorHandler(std::shared_ptr<ICollidable> p, std::shared_ptr<ICollidable> d, Level& level) {
     //Objects may no longer be colliding, so double check
-    if (!p.isCollidingWith(d))
+    if (!p->isCollidingWith(*d))
         return;
 
-    Door& door = dynamic_cast<Door&>(d);
+    Door& door = dynamic_cast<Door&>(*d);
     door.setActivated(true);
 }
 
-void CollisionHandlers::BeamBlockHandler(ICollidable& be, ICollidable& bl) {
+void CollisionHandlers::BeamBlockHandler(std::shared_ptr<ICollidable> be, std::shared_ptr<ICollidable> bl, Level& level) {
     //Objects may no longer be colliding, so double check
-    if (!be.isCollidingWith(bl))
+    if (!be->isCollidingWith(*bl))
         return;
 
-    Beam& beam = dynamic_cast<Beam&>(be);
+    Beam& beam = dynamic_cast<Beam&>(*be);
+    Block& block = dynamic_cast<Block&>(*bl);
 
-    beam.move(beam.trace(bl) - beam.getSize().x);
+    if (beam.getColor() == block.getColor()) {
+        level.removeEntity(std::static_pointer_cast<Block>(bl));
+        beam.addBlocks(1);
+    }
+
+    beam.move(beam.trace(block) - beam.getSize().x);
 }

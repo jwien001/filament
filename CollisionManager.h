@@ -53,7 +53,7 @@ class CollisionManager
          * Processes all collisions for all added objects in the manager,
          * using the added handlers to process conflicts.
          */
-        void processCollisions();
+        void processCollisions(Level& level);
 };
 
 #endif // COLLISIONMANAGER_H

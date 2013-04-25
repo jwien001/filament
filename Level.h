@@ -33,6 +33,7 @@ class Level : public sf::Drawable
 
         void removeLevelObject(std::shared_ptr<ILevelObject> lvlObj);
         void removeCollidable(std::shared_ptr<ICollidable> coll);
+        void removeEntity(std::shared_ptr<Entity> ent);
 
         const sf::Vector2f& getSize() const {
             return levelSize;

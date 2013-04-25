@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void CollisionManager::processCollisions() {
+void CollisionManager::processCollisions(Level& level) {
     //List of collisions to handle
     forward_list<tuple<CollisionHandler, shared_ptr<ICollidable>, shared_ptr<ICollidable>>> collisions;
 
@@ -35,6 +35,6 @@ void CollisionManager::processCollisions() {
 
     //Process each collision by calling the collision handlers and passing the colliding objects
     for(auto col : collisions){
-        get<0>(col)(*get<1>(col), *get<2>(col));
+        get<0>(col)(get<1>(col), get<2>(col), level);
     }
 }

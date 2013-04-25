@@ -110,13 +110,18 @@ void Level::removeCollidable(std::shared_ptr<ICollidable> coll) {
     colManager.removeCollidable(coll);
 }
 
+void Level::removeEntity(shared_ptr<Entity> ent) {
+    removeLevelObject(ent);
+    removeCollidable(ent);
+}
+
 void Level::update(Time delta) {
     for (shared_ptr<ILevelObject> obj : objects) {
         obj->update(*this, delta);
     }
     player->update(*this, delta);
 
-    colManager.processCollisions();
+    colManager.processCollisions(*this);
 }
 
 void Level::draw(RenderTarget& target, RenderStates states) const {

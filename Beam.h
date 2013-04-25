@@ -6,6 +6,8 @@
 class Beam : public ILevelObject, public ICollidable
 {
     sf::RectangleShape rect;
+    int numBlocks;
+    int traceNum;
 
     public:
         static const sf::Mouse::Button BUTTON;
@@ -39,8 +41,25 @@ class Beam : public ILevelObject, public ICollidable
             rect.setRotation(angle);
         }
 
+        void addBlocks(int num) {
+            numBlocks += num;
+        }
+
+        int removeBlocks() {
+            int num = numBlocks;
+            numBlocks = 0;
+            return num;
+        }
+
         bool isCollidingWith(ICollidable& other) override {
-            return getCollisionBox().intersects(other.getCollisionBox()) && trace(other) >=0;
+            if (getCollisionBox().intersects(other.getCollisionBox())) {
+                int t = trace(other);
+                if (t >=0 && t <= traceNum) {
+                    traceNum = t;
+                    return true;
+                }
+            }
+            return false;
         };
 
         int trace(ICollidable& other);

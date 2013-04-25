@@ -1,12 +1,13 @@
 #include "Beam.h"
 #include <iostream>
+#include <limits>
 
 using namespace std;
 using namespace sf;
 
 const sf::Mouse::Button Beam::BUTTON = Mouse::Right;
 
-Beam::Beam(Player* player) : rect()
+Beam::Beam(Player* player) : rect(), numBlocks(0), traceNum(numeric_limits<int>::max())
 {
     rect.setSize(Vector2f(5, 1));
     rect.setPosition(player->getCenter() + Vector2f(6, -17));
@@ -16,9 +17,11 @@ Beam::Beam(Player* player) : rect()
 
 void Beam::update(Level& level, Time delta) {
     if (Mouse::isButtonPressed(BUTTON))
-        move(32);
+        move(30);
     else
-        move(32 * -1.5);
+        move(30 * -1.5);
+
+    traceNum = numeric_limits<int>::max();
 }
 
 void Beam::move(float count) {

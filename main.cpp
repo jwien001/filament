@@ -16,6 +16,7 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "Filament Demo");
     window.setFramerateLimit(60);
+    window.setVerticalSyncEnabled(true);
 
     sf::View view(sf::FloatRect(0, 0, screenSize.x, screenSize.y));
     view.setViewport(sf::FloatRect(0, 0, 1, 1));
