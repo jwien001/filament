@@ -67,7 +67,10 @@ void Player::drawUI(sf::RenderTarget& target, Font& font, View& view) {
     for (int i=0; i<colorList.size(); ++i) {
         RectangleShape rect(Vector2f(boxWidth, 32));
         rect.setFillColor(Color::White);
-        rect.setOutlineColor(Color(127, 127, 127));
+        if (i == colorIndex)
+            rect.setOutlineColor(colorList[colorIndex]);
+        else
+            rect.setOutlineColor(Color(127, 127, 127));
         rect.setOutlineThickness(2);
         rect.setPosition(centerAlign + (boxWidth + boxBuffer) * i, topAlign);
 
@@ -100,7 +103,7 @@ void Player::handleEvent(Event& event, Level& level) {
         }
     } else if (event.type == Event::MouseButtonPressed) {
         if (event.mouseButton.button == Beam::BUTTON) {
-            if (!beam) {
+            if (!beam && !phasing) {
                 Beam* b = new Beam(this);
                 Vector2f diff = level.getMouse() - b->getPosition();
                 b->setRotation(atan2(diff.y, diff.x) * 57.3);

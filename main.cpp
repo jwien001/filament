@@ -27,7 +27,7 @@ int main()
     sf::Clock clock;
 
     shared_ptr<Player> player{new Player};
-    Level level('1', player);
+    Level level('1', player, 's');
 
     while (window.isOpen())
     {
@@ -59,15 +59,15 @@ int main()
         Vector2f center = player->getCenter();
         Vector2f levelSize = level.getSize() * Level::BLOCK_SIZE;
 
+        if (center.x > levelSize.x - screenSize.x / 2)
+            center.x = levelSize.x - screenSize.x / 2;
         if (center.x < screenSize.x / 2)
             center.x = screenSize.x / 2;
-        else if (center.x > levelSize.x - screenSize.x / 2)
-            center.x = levelSize.x - screenSize.x / 2;
 
+        if (center.y > levelSize.y - screenSize.y / 2)
+            center.y = levelSize.y - screenSize.y / 2;
         if (center.y < screenSize.y / 2)
             center.y = screenSize.y / 2;
-        else if (center.y > levelSize.y - screenSize.y / 2)
-            center.y = levelSize.y - screenSize.y / 2;
 
         view.setCenter(center);
 
