@@ -1,9 +1,7 @@
-#include "Player.h"
-#include "Beam.h"
-
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cmath>
+#include "Player.h"
+#include "Beam.h"
 
 using namespace sf;
 
@@ -17,7 +15,7 @@ std::unordered_map<Color, std::string, ColorHash> Player::texMap = {
     {Color::Red, "/CS 2804/filament/res/img/red_dude.png"}
 };
 
-Player::Player() : Entity(), oldPosition(), colorIndex(-1), airborne(true), phasing(false), beam()
+Player::Player() : Entity(), inventory(), oldPosition(), colorIndex(-1), airborne(true), phasing(false), beam()
 {
     nextColor();
     sprite.setPosition(40, 40);
@@ -41,6 +39,7 @@ void Player::update(Level& level, Time delta) {
     setPosition(Vector2f(newX, newY));
 
     if (beam) {
+        inventory[colorList[colorIndex]] += beam->removeBlocks();
         if (beam->getSize().x <= 0) {
             level.removeLevelObject(beam);
             level.removeCollidable(beam);
@@ -55,6 +54,34 @@ void Player::update(Level& level, Time delta) {
 
     airborne = true;
     phasing = false;
+}
+
+void Player::drawUI(sf::RenderTarget& target, Font& font, View& view) {
+    int boxWidth = 40;
+    int boxBuffer = 16;
+    int totalWidth = (boxWidth + boxBuffer) * colorList.size();
+    float centerAlign = view.getCenter().x - (totalWidth / 2);
+    float topAlign = view.getCenter().y - (view.getSize().y / 2) + boxBuffer;
+
+    for (int i=0; i<colorList.size(); ++i) {
+        RectangleShape rect(Vector2f(boxWidth, 32));
+        rect.setFillColor(Color::White);
+        rect.setOutlineColor(Color(127, 127, 127));
+        rect.setOutlineThickness(2);
+        rect.setPosition(centerAlign + (boxWidth + boxBuffer) * i, topAlign);
+
+        std::stringstream ss;
+        int count = inventory[colorList[i]];
+        if (count < 10)
+            ss << "0";
+        ss << count;
+        Text text(ss.str(), font, 30);
+        text.setColor(colorList[i]);
+        text.setPosition(centerAlign + (boxWidth + boxBuffer) * i + 4, topAlign - 8);
+
+        target.draw(rect);
+        target.draw(text);
+    }
 }
 
 void Player::handleEvent(Event& event, Level& level) {

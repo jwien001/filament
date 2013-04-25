@@ -21,6 +21,9 @@ int main()
     sf::View view(sf::FloatRect(0, 0, screenSize.x, screenSize.y));
     view.setViewport(sf::FloatRect(0, 0, 1, 1));
 
+    sf::Font font;
+    font.loadFromFile("/CS 2804/filament/res/visitor1.ttf");
+
     sf::Clock clock;
 
     shared_ptr<Player> player{new Player};
@@ -77,6 +80,9 @@ int main()
         window.draw(level);
 
         glDisable(GL_COLOR_LOGIC_OP);
+
+        player->drawUI(window, font, view);
+
         window.display();
     }
 

@@ -28,6 +28,8 @@ class Player : public Entity
     static std::vector<sf::Color> colorList;
     static std::unordered_map<sf::Color, std::string, ColorHash> texMap;
 
+    std::unordered_map<sf::Color, int, ColorHash> inventory;
+
     sf::Vector2f oldPosition;
     int colorIndex;
     bool airborne;
@@ -38,6 +40,7 @@ class Player : public Entity
         Player();
 
         void update(Level& level, sf::Time delta) override;
+        void drawUI(sf::RenderTarget& target, sf::Font& font, sf::View& view);
         void handleEvent(sf::Event& event, Level& level);
 
         void setAirborne(bool a) {
