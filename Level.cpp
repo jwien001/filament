@@ -7,6 +7,7 @@
 #include "Block.h"
 #include "Door.h"
 #include "Beam.h"
+#include "Projectile.h"
 
 using namespace std;
 using namespace sf;
@@ -57,6 +58,7 @@ Level::Level(char level, shared_ptr<Player> plyr, char src) : id(level), objects
         colManager.addHandler<Player, Block>(&CollisionHandlers::PlayerBlockHandler);
         colManager.addHandler<Player, Door>(&CollisionHandlers::PlayerDoorHandler);
         colManager.addHandler<Beam, Block>(&CollisionHandlers::BeamBlockHandler);
+        colManager.addHandler<Projectile, Block>(&CollisionHandlers::ProjectileBlockHandler);
     }
 }
 

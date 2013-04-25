@@ -36,6 +36,7 @@ class CollisionManager
          * Removes an object from the collision manager.
          */
         void removeCollidable(std::shared_ptr<ICollidable> collidable) {
+            collidable->setDestroyed(true);
             collidables[typeid(*collidable).hash_code()].remove(collidable);
         }
 

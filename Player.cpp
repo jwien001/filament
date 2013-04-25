@@ -2,6 +2,7 @@
 #include <cmath>
 #include "Player.h"
 #include "Beam.h"
+#include "Projectile.h"
 
 using namespace sf;
 
@@ -106,6 +107,15 @@ void Player::handleEvent(Event& event, Level& level) {
                 beam.reset(b);
                 level.addLevelObject(beam);
                 level.addCollidable(beam);
+            }
+        } else if (event.mouseButton.button == Projectile::BUTTON) {
+            if (inventory[colorList[colorIndex]] > 0 && !phasing) {
+                Vector2f diff = level.getMouse() - (getCenter() + Vector2f(6, -17));
+                float mag = sqrt(diff.x*diff.x + diff.y*diff.y);
+                std::shared_ptr<Projectile> proj{new Projectile(this, diff / mag)};
+                level.addLevelObject(proj);
+                level.addCollidable(proj);
+                --inventory[colorList[colorIndex]];
             }
         }
     }

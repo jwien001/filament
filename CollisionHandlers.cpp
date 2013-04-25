@@ -6,6 +6,7 @@
 #include "Block.h"
 #include "Door.h"
 #include "Beam.h"
+#include "Projectile.h"
 
 using namespace sf;
 
@@ -66,4 +67,22 @@ void CollisionHandlers::BeamBlockHandler(std::shared_ptr<ICollidable> be, std::s
     }
 
     beam.move(beam.trace(block) - beam.getSize().x);
+}
+
+void CollisionHandlers::ProjectileBlockHandler(std::shared_ptr<ICollidable> p, std::shared_ptr<ICollidable> b, Level& level) {
+    //Objects may no longer be colliding, so double check
+    if (!p->isCollidingWith(*b))
+        return;
+
+    std::shared_ptr<Projectile> proj = std::static_pointer_cast<Projectile>(p);
+
+    if (!proj->wasPhasing()) {
+        Vector2f oldPos = proj->getOldPosition();
+        Vector2f blockPos((int)(oldPos.x / Level::BLOCK_SIZE) * Level::BLOCK_SIZE, (int)(oldPos.y / Level::BLOCK_SIZE) * Level::BLOCK_SIZE);
+
+        level.addEntity(std::shared_ptr<Block>{new Block(blockPos, proj->getColor())});
+    }
+
+    level.removeLevelObject(proj);
+    level.removeCollidable(proj);
 }
