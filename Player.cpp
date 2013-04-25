@@ -74,7 +74,7 @@ void Player::handleEvent(Event& event, Level& level) {
         if (event.mouseButton.button == Beam::BUTTON) {
             if (!beam) {
                 Beam* b = new Beam(this);
-                Vector2f diff = Vector2f(event.mouseButton.x, event.mouseButton.y) - b->getPosition();
+                Vector2f diff = level.getMouse() - b->getPosition();
                 b->setRotation(atan2(diff.y, diff.x) * 57.3);
                 beam.reset(b);
                 level.addLevelObject(beam);
