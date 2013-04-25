@@ -23,6 +23,7 @@ Level::Level(char level, shared_ptr<Player> plyr, char src) : id(level), objects
     if (file.is_open()) {
         vector<string> lines;
 
+        //Read file line-by-line into string vector
         copy(istream_iterator<string>(file), istream_iterator<string>(), back_inserter(lines));
 
         int width = lines[0].length();
@@ -31,16 +32,20 @@ Level::Level(char level, shared_ptr<Player> plyr, char src) : id(level), objects
 
         char mapData[width][height];
 
+        //Create a 2D array of all the characters
         for (int y=0; y<height; ++y)
             for (int x=0; x<width; ++x)
                 mapData[x][y] = lines[y][x];
 
+        //Iterate over the 2D array again and create objects when appropriate
         for (int y=0; y<height; ++y) {
             for (int x=0; x<width; ++x) {
                 if (mapData[x][y] == 'd') {
+                    //Create a door to the indicated level
                     addEntity(shared_ptr<Door>{new Door(Vector2f(x, y) * BLOCK_SIZE, mapData[x][y+1])});
                     mapData[x][y+1] = '.';
                 } else if (mapData[x][y] == 'p') {
+                    //Place the player here if it came from the indicated level
                     if (mapData[x][y+1] == src) {
                         Vector2f pos = Vector2f(x, y + 2) * BLOCK_SIZE;
                         pos.y = pos.y - player->getCollisionBox().height;
@@ -54,6 +59,7 @@ Level::Level(char level, shared_ptr<Player> plyr, char src) : id(level), objects
             }
         }
 
+        //Set up collisions
         colManager.addCollidable(plyr);
         colManager.addHandler<Player, Block>(&CollisionHandlers::PlayerBlockHandler);
         colManager.addHandler<Player, Door>(&CollisionHandlers::PlayerDoorHandler);

@@ -27,11 +27,13 @@ void Player::update(Level& level, Time delta) {
     Vector2f pos = getPosition();
     oldPosition.x = pos.x;
 
+    //Horizontal movement
     if (Keyboard::isKeyPressed(Keyboard::A))
         oldPosition.x += SPEED;
     if (Keyboard::isKeyPressed(Keyboard::D))
         oldPosition.x -= SPEED;
 
+    //Simplified verlet integrator
     int dt = delta.asMilliseconds();
     float newX = pos.x + (pos.x - oldPosition.x);
     float newY = pos.y + (pos.y - oldPosition.y) + (GRAVITY);
@@ -39,20 +41,25 @@ void Player::update(Level& level, Time delta) {
     setOldPosition(pos);
     setPosition(Vector2f(newX, newY));
 
+    //Update beam
     if (beam) {
         inventory[colorList[colorIndex]] += beam->removeBlocks();
+
         if (beam->getSize().x <= 0) {
+            //Destroy beam if it shrinks back to 0
             level.removeLevelObject(beam);
             level.removeCollidable(beam);
             beam.reset();
         }
         else {
+            //Otherwise update position and angle based on new Player and mouse positions
             beam->setPosition(getCenter() + Vector2f(6, -17));
             Vector2f diff = level.getMouse() - beam->getPosition();
             beam->setRotation(atan2(diff.y, diff.x) * 57.3);
         }
     }
 
+    //Reset these variables before the next collision cycle
     airborne = true;
     phasing = false;
 }
@@ -91,11 +98,14 @@ void Player::drawUI(sf::RenderTarget& target, Font& font, View& view) {
 void Player::handleEvent(Event& event, Level& level) {
     if (event.type == Event::KeyPressed) {
         if (event.key.code == Keyboard::W && !airborne)
+            //W makes the player jump, but only if it's on the ground
             oldPosition.y += JUMP;
         else if (event.key.code == Keyboard::Space && !phasing) {
+            //Space cycles to the next color
             nextColor();
 
             if (beam) {
+                //If there was a beam, it was of the old color, so destroy it
                 level.removeLevelObject(beam);
                 level.removeCollidable(beam);
                 beam.reset();
@@ -103,6 +113,7 @@ void Player::handleEvent(Event& event, Level& level) {
         }
     } else if (event.type == Event::MouseButtonPressed) {
         if (event.mouseButton.button == Beam::BUTTON) {
+            //Right click spawns a new beam if one doesn't already exist
             if (!beam && !phasing) {
                 Beam* b = new Beam(this);
                 Vector2f diff = level.getMouse() - b->getPosition();
@@ -112,6 +123,7 @@ void Player::handleEvent(Event& event, Level& level) {
                 level.addCollidable(beam);
             }
         } else if (event.mouseButton.button == Projectile::BUTTON) {
+            //Left click fires a projectile if the player has ammo
             if (inventory[colorList[colorIndex]] > 0 && !phasing) {
                 Vector2f diff = level.getMouse() - (getCenter() + Vector2f(6, -17));
                 float mag = sqrt(diff.x*diff.x + diff.y*diff.y);

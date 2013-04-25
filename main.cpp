@@ -26,6 +26,7 @@ int main()
 
     sf::Clock clock;
 
+    //Create player and first level
     shared_ptr<Player> player{new Player};
     Level level('1', player, 's');
 
@@ -51,6 +52,7 @@ int main()
 
         level.update(delta);
 
+        //Handle level transition
         if (level.getDestination() != '\0') {
             level = Level(level.getDestination(), player, level.getId());
             continue;
@@ -59,6 +61,7 @@ int main()
         Vector2f center = player->getCenter();
         Vector2f levelSize = level.getSize() * Level::BLOCK_SIZE;
 
+        //Center view on player, but keep it inside the level bounds
         if (center.x > levelSize.x - screenSize.x / 2)
             center.x = levelSize.x - screenSize.x / 2;
         if (center.x < screenSize.x / 2)
@@ -74,6 +77,7 @@ int main()
         window.setView(view);
         window.clear(sf::Color::White);
 
+        //Use special OpenGL rendering mode to create the color inversion effect
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_EQUIV);
 

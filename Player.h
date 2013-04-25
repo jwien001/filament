@@ -69,6 +69,7 @@ class Player : public Entity
                 if (getColor() != other.getColor())
                     return true;
 
+                //Player is overlapping a block of the same color
                 phasing = true;
             }
             return false;

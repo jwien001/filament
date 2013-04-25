@@ -53,7 +53,10 @@ class Beam : public ILevelObject, public ICollidable
 
         bool isCollidingWith(ICollidable& other) override {
             if (getCollisionBox().intersects(other.getCollisionBox())) {
+                //Bounding box intersection is inaccurate, so use trace to double check
                 int t = trace(other);
+
+                //If a smaller trace number was already calculated, we should not be colliding past that
                 if (t >=0 && t <= traceNum) {
                     traceNum = t;
                     return true;
@@ -62,6 +65,9 @@ class Beam : public ILevelObject, public ICollidable
             return false;
         };
 
+        /**
+         * Perform ray casting along the beam, returning the length at which the first collision is detected.
+         */
         int trace(ICollidable& other);
 
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override {

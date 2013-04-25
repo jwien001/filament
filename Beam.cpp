@@ -29,6 +29,7 @@ void Beam::move(float count) {
 }
 
 int Beam::trace(ICollidable& other) {
+    //Ray casting!
     sf::FloatRect mini(getPosition().x, getPosition().y, 1, 1);
     for (int i=0; i<rect.getSize().x; ++i) {
         if (mini.intersects(other.getCollisionBox()))
