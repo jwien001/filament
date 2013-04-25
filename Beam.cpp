@@ -15,10 +15,25 @@ Beam::Beam(Player* player) : rect()
 }
 
 void Beam::update(Level& level, Time delta) {
-    Vector2f dx(32, 0);
+    if (Mouse::isButtonPressed(BUTTON))
+        move(32);
+    else
+        move(32 * -1.5);
+}
 
-    if (!Mouse::isButtonPressed(BUTTON))
-        dx *= (float)-1.5;
+void Beam::move(float count) {
+    rect.setSize(rect.getSize() + Vector2f(count, 0));
+}
 
-    rect.setSize(rect.getSize() + dx);
+int Beam::trace(ICollidable& other) {
+    sf::FloatRect mini(getPosition().x, getPosition().y, 1, 1);
+    for (int i=0; i<rect.getSize().x; ++i) {
+        if (mini.intersects(other.getCollisionBox()))
+            return i;
+        else {
+            mini.left += cos(rect.getRotation() / 57.3);
+            mini.top += sin(rect.getRotation() / 57.3);
+        }
+    }
+    return -1;
 }

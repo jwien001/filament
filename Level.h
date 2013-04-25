@@ -17,6 +17,7 @@ class Level : public sf::Drawable
     sf::Vector2f levelSize;
     std::shared_ptr<Player> player;
     char destination;
+    sf::Vector2f mousePos;
 
     public:
         static const float BLOCK_SIZE;
@@ -47,6 +48,14 @@ class Level : public sf::Drawable
 
         void setDestination(const char& dest) {
             destination = dest;
+        }
+
+        const sf::Vector2f& getMouse() const {
+            return mousePos;
+        }
+
+        void setMouse(const sf::Vector2f& mouse) {
+            mousePos = mouse;
         }
 
     private:

@@ -1,7 +1,6 @@
 #ifndef BEAM_H
 #define BEAM_H
 
-#include <SFML/OpenGL.hpp>
 #include "Player.h"
 
 class Beam : public ILevelObject, public ICollidable
@@ -14,6 +13,7 @@ class Beam : public ILevelObject, public ICollidable
         Beam(Player* player);
 
         void update(Level& level, sf::Time delta) override;
+        void move(float count);
 
         const sf::Vector2f& getPosition() const override {
             return rect.getPosition();
@@ -38,6 +38,12 @@ class Beam : public ILevelObject, public ICollidable
         void setRotation(float angle) {
             rect.setRotation(angle);
         }
+
+        bool isCollidingWith(ICollidable& other) override {
+            return getCollisionBox().intersects(other.getCollisionBox()) && trace(other) >=0;
+        };
+
+        int trace(ICollidable& other);
 
         void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
             target.draw(rect);

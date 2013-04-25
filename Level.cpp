@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Block.h"
 #include "Door.h"
+#include "Beam.h"
 
 using namespace std;
 using namespace sf;
@@ -13,7 +14,7 @@ using namespace sf;
 const float Level::BLOCK_SIZE = 32;
 
 Level::Level(char level, shared_ptr<Player> plyr, char src) : id(level), objects(), colManager(),
-        levelSize(), player(plyr), destination('\0') {
+        levelSize(), player(plyr), destination('\0'), mousePos() {
     stringstream ss;
     ss << "/CS 2804/filament/res/map/level" << id << ".txt";
     ifstream file(ss.str());
@@ -55,6 +56,7 @@ Level::Level(char level, shared_ptr<Player> plyr, char src) : id(level), objects
         colManager.addCollidable(plyr);
         colManager.addHandler<Player, Block>(&CollisionHandlers::PlayerBlockHandler);
         colManager.addHandler<Player, Door>(&CollisionHandlers::PlayerDoorHandler);
+        colManager.addHandler<Beam, Block>(&CollisionHandlers::BeamBlockHandler);
     }
 }
 

@@ -5,8 +5,6 @@
 #include <iostream>
 #include <cmath>
 
-#define PI	 3.14159265358979323846
-
 using namespace sf;
 
 const float Player::SPEED = 4;
@@ -48,8 +46,11 @@ void Player::update(Level& level, Time delta) {
             level.removeCollidable(beam);
             beam.reset();
         }
-        else
+        else {
             beam->setPosition(getCenter() + Vector2f(6, -17));
+            Vector2f diff = level.getMouse() - beam->getPosition();
+            beam->setRotation(atan2(diff.y, diff.x) * 57.3);
+        }
     }
 
     airborne = true;
@@ -74,16 +75,11 @@ void Player::handleEvent(Event& event, Level& level) {
             if (!beam) {
                 Beam* b = new Beam(this);
                 Vector2f diff = Vector2f(event.mouseButton.x, event.mouseButton.y) - b->getPosition();
-                b->setRotation(atan2(diff.y, diff.x) * 180 / PI);
+                b->setRotation(atan2(diff.y, diff.x) * 57.3);
                 beam.reset(b);
                 level.addLevelObject(beam);
                 level.addCollidable(beam);
             }
-        }
-    } else if (event.type == Event::MouseMoved) {
-        if (beam) {
-            Vector2f diff = Vector2f(event.mouseMove.x, event.mouseMove.y) - beam->getPosition();
-            beam->setRotation(atan2(diff.y, diff.x) * 180 / PI);
         }
     }
 }

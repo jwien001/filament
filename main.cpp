@@ -29,14 +29,21 @@ int main()
     {
         sf::Event event;
         sf::Time delta = clock.restart();
+        static sf::Vector2f mouse;
+
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-            else {
+            else if (event.type == Event::MouseMoved) {
+                mouse.x = event.mouseMove.x;
+                mouse.y = event.mouseMove.y;
+            } else {
                 player->handleEvent(event, level);
             }
         }
+
+        level.setMouse(mouse + view.getCenter() - (screenSize / (float)2));
 
         level.update(delta);
 

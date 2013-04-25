@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Block.h"
 #include "Door.h"
+#include "Beam.h"
 
 using namespace sf;
 
@@ -49,4 +50,14 @@ void CollisionHandlers::PlayerDoorHandler(ICollidable& p, ICollidable& d) {
 
     Door& door = dynamic_cast<Door&>(d);
     door.setActivated(true);
+}
+
+void CollisionHandlers::BeamBlockHandler(ICollidable& be, ICollidable& bl) {
+    //Objects may no longer be colliding, so double check
+    if (!be.isCollidingWith(bl))
+        return;
+
+    Beam& beam = dynamic_cast<Beam&>(be);
+
+    beam.move(beam.trace(bl) - beam.getSize().x);
 }
