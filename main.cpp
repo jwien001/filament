@@ -22,7 +22,7 @@ int main()
     view.setViewport(sf::FloatRect(0, 0, 1, 1));
 
     sf::Font font;
-    font.loadFromFile("/CS 2804/filament/res/visitor1.ttf");
+    font.loadFromFile("res/visitor1.ttf");
 
     sf::Clock clock;
 

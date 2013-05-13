@@ -5,7 +5,7 @@ using namespace sf;
 
 Door::Door(Vector2f pos, char c) : Entity(), id(c), activated(false)
 {
-    Texture* tex = texManager.getResource("/CS 2804/filament/res/img/door.png");
+    Texture* tex = texManager.getResource("res/img/door.png");
     sprite.setTexture(*tex);
     sprite.setPosition(pos);
 }

@@ -12,8 +12,8 @@ const float Player::GRAVITY = 0.6;
 
 std::vector<sf::Color> Player::colorList = {Color::Black, Color::Red};
 std::unordered_map<Color, std::string, ColorHash> Player::texMap = {
-    {Color::Black, "/CS 2804/filament/res/img/black_dude.png"},
-    {Color::Red, "/CS 2804/filament/res/img/red_dude.png"}
+    {Color::Black, "res/img/black_dude.png"},
+    {Color::Red, "res/img/red_dude.png"}
 };
 
 Player::Player() : Entity(), inventory(), oldPosition(), colorIndex(-1), airborne(true), phasing(false), beam()

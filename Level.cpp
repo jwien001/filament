@@ -17,7 +17,7 @@ const float Level::BLOCK_SIZE = 32;
 Level::Level(char level, shared_ptr<Player> plyr, char src) : id(level), objects(), colManager(),
         levelSize(), player(plyr), destination('\0'), mousePos() {
     stringstream ss;
-    ss << "/CS 2804/filament/res/map/level" << id << ".txt";
+    ss << "res/map/level" << id << ".txt";
     ifstream file(ss.str());
 
     if (file.is_open()) {
